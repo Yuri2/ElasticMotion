@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+*{margin:0px;padding:0px;}
+#aImg{width:210px;height:210px;position:absolute;top:0px;left:0px;}
+</style>
+</head>
+<body>
+<img id="aImg" src="1.jpg" />
+<script>
+window.onload=function(){
+	var oimg=document.getElementById('aImg');
+	var y,x,preY,preX,netY,netX,time,yy2,xx2;
+		oimg.onmousedown=function(e){
+			e=e||window.event;
+			var imgY=e.pageY-oimg.offsetTop;
+			var imgX=e.pageX-oimg.offsetLeft;
+				 y=e.pageY;
+				 x=e.pageX;
+			document.onmousemove=function(e){
+				e=e||window.event;
+				var a=e.pageY-imgY;
+				var b=e.pageX-imgX;
+				oimg.style.top=a+'px';
+				oimg.style.left=b+'px';
+				netY=e.pageY-y;
+				netX=e.pageX-x;
+				y=e.pageY;
+				x=e.pageX;
+			}
+			document.onmouseup=function(e){
+				document.onmousemove=null;
+				document.onmouseup=null;
+				tomove();
+			}
+			return false;	
+		}
+		function tomove(){
+			clearInterval(time);
+			time=setInterval(function(){
+				netY+=3;
+				var yy=oimg.offsetTop+netY;
+				var xx=oimg.offsetLeft+netX;
+				if(yy<0){
+					netY*=-1;
+					yy=0;
+					netY*=0.80;
+					netX*=0.80;
+				}else if(yy>document.documentElement.clientHeight-oimg.offsetHeight){
+					netY*=-1;
+					yy=	document.documentElement.clientHeight-oimg.offsetHeight;
+					netY*=0.80;
+					netX*=0.80;
+				}
+				if(xx<0){
+					netX*=-1;
+					xx=0;
+					netX*=0.80;
+				}else if(xx>document.documentElement.clientWidth-oimg.offsetWidth){
+					netX*=-1;
+					xx=document.documentElement.clientWidth-oimg.offsetWidth;
+					netX*=0.80;
+				}
+				console.log(yy+":"+xx);
+				if(yy==yy2 && xx==xx2 && document.documentElement.clientHeight-oimg.offsetHeight-yy<0.0002){
+					clearInterval(time);
+				}
+				oimg.style.top=yy+"px";
+				oimg.style.left=xx+"px";
+				yy2=yy;
+				xx2=xx;
+			},30)
+		}
+}
+</script>
+</body>
+</html>
